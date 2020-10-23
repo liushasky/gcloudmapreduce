@@ -1,12 +1,11 @@
 import ray
 
-def init_cluster(ip_address, port):
+def init_cluster(ip_address):
     import random
-    if ip_address in ['localhost','127.0.0.1']:
+    if ip_address.split(":")[0] in ['localhost','127.0.0.1']:
         ray.init()
     else:
-        ray_address = "{}:{}".format(ip_address, port)
-        ray.init(address=ray_address)
+        ray.init(address=ip_address)
     return random.randint(0, 9999)
 
 def run_mapred(input_data, map_fn, reduce_fn, output_location):

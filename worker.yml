@@ -1,0 +1,39 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ray-worker
+  labels:
+    app: ray-worker
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: ray-worker
+  template:
+    metadata:
+      labels:
+        app: ray-worker
+    spec:
+      containers:
+      - name: ray-worker
+        image: gcr.io/iu-e516-assignment3/mapreduce-kube-cluster
+        ports:
+        - containerPort: 12345
+        env:
+        - name: MY_POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        command: [ "/bin/bash", "-c", "--" ]
+        args:
+          - "echo alias python=python3 >> ~/.bashrc; source ~/.bashrc;
+            ray start --node-ip-address $MY_POD_IP --address $(python3 -c 'import socket;import sys; sys.stdout.write(socket.gethostbyname(\"ray-head.default.svc.cluster.local\"));sys.stdout.flush()'):6379 --object-manager-port 12345;
+            touch /root/.ssh/authorized_keys;
+            sleep 3;
+            echo 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDlyl+2UoYlfZ+IMJFxWMoIDAhsTlYCZgLUuW2/gcKVpW+t0EyeR1c1J0ePnahFU9uS4pfYStQrZsv48Nl3NAaxN/ED1CNPJeAszMD6fw1Qg/dTy0IHBIT2a4M9EoJ4egS0jEhFarvpP2Vj1SDB/KYpWmXU28tFs6eN2DxsIKUDo6W6diE2Q8aVFE3HKQcRkzvVcs6Czvq7m2eklgMwyc6HU3ZFsEc/ZFX3p1lznaSjsKXjGFBeVZoARFzkpAz8YJwjTuT5WQL9pk/q20FFJZF/OQBjKGCUgoZQRqpB7QFP4rAK/a2Vl+9YGYiKW1K0tJOhQrOVzF9lO10DTfFZavZU3ccZdphUXx05M3BKNgjcwvCFFm8ze21ZbWc7A4fJyl/R1L4SQio0Gi+VvAiLMOgapzj1yNU8cyn4NvhD8KgPAvpSz3oRGGMqBJXZPRh+9fluw3ApxFPsBlbKslc7InPU9Z1vkla2U73DTuWLG21Q9jqBcK+y98GtjOy3aGD+K68= root@b13690d5bfe6' >> ~/.ssh/authorized_keys;
+            service ssh restart;
+            sleep 3;
+            service ssh restart;
+            echo This worker IP $MY_POD_IP
+            && while true; do sleep 30; done;"
