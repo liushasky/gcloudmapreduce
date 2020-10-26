@@ -1,5 +1,5 @@
 import itertools
-### use collections as the key-value store, my own implementation of key-value pairs does not work well with Ray yet
+### use collections as the key-value store
 import collections 
 
 class RayMapReduce(object):

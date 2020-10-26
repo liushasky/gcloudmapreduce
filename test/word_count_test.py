@@ -1,15 +1,15 @@
-from mapreduce.example.word_count import *
+from mapreduce.applications.word_count import *
 from mapreduce.api import *
-import sys
 import operator
+
 ### Input/Output file path
-input_files = "/mapreduce/test/*.txt"
-output_location = "/mapreduce/test/output/wc_sample_result.txt"
+input_files = "/Users/shaliu/gcloud_mapreduce/test/input/*.txt"
+output_location = "/Users/shaliu/gcloud_mapreduce/test/output/word_count_result.txt"
 
 ### Start testing
-cluster_id = init_cluster(sys.argv[1])
+cluster_id = init_cluster('localhost:9008')
 result = run_mapred(input_files, map_words, count_words, output_location)
-# destroy_cluster(cluster_id)
+destroy_cluster(cluster_id)
 
 result.sort(key=operator.itemgetter(1))
 result.reverse()

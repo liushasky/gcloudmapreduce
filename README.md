@@ -1,2 +1,2 @@
 # mapreduce
-simple implementation of mapreduce with python
+Implementation of customized mapreduce with python to google cloud account liushaskymm@gmail.com

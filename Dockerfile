@@ -42,11 +42,11 @@ RUN apt-get update \
 
 RUN pip install ray
 
-COPY mapreduce /mapreduce/mapreduce
-COPY test /mapreduce/test
-COPY setup.py /mapreduce/
+COPY mapreduce /gcloud_mapreduce/mapreduce
+COPY test /gcloud_mapreduce/test
+COPY setup.py /gcloud_mapreduce/
 
-RUN cd /mapreduce \
+RUN cd /gcloud_mapreduce \
     && pip install .
 
 RUN echo "alias python='python3'" >> ~/.bashrc
